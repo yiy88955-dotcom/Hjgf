@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بي بي سي عربي - BBC Arabic</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Cairo', 'IBM Plex Sans Arabic', sans-serif;
+      background-color: #0a0a0a;
+      color: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0a0a0a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #262626;
+      border-radius: 2px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #bb1919;
+    }
+    @keyframes bbc-pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.1); }
+    }
+    .pulse-dot {
+      animation: bbc-pulse 1.5s infinite;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-[#0a0a0a] text-white min-h-screen flex flex-col selection:bg-[#bb1919] selection:text-white">
+
+  <!-- 1. Top Utility Bar -->
+  <header class="w-full bg-[#121212] text-white select-none border-b border-[#2a2a2a] sticky top-0 z-50">
+    <div class="bg-[#1e1e1e] border-b border-[#2c2c2c] text-xs py-1.5 px-4">
+      <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-4 text-gray-300">
+          <div class="flex items-center gap-1.5 font-medium">
+            <i class="fa-regular fa-clock text-[#bb1919]"></i>
+            <span id="liveDate">الأربعاء 19 أغسطس 2026</span>
+          </div>
+          <div class="flex items-center gap-1.5 bg-[#2a2a2a] px-2 py-0.5 rounded text-gray-200 border border-[#3a3a3a]">
+            <i class="fa-solid fa-cloud-sun text-amber-400"></i>
+            <span class="font-semibold text-white">القاهرة:</span>
+            <span>34°م</span>
+          </div>
+          <div class="hidden lg:flex items-center gap-2 border-r border-gray-700 pr-3 mr-2">
+            <i class="fa-solid fa-arrow-trend-up text-emerald-400"></i>
+            <span class="text-gray-300 font-medium">برنت:</span>
+            <span class="text-white font-bold">$81.75</span>
+            <span class="text-emerald-400 font-mono text-[11px]">+0.65%</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 sm:gap-3">
+          <button onclick="toggleRadio()" id="radioBtn" class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#2b2b2b] text-gray-200 hover:bg-[#bb1919] hover:text-white border border-[#3f3f3f] font-medium text-xs cursor-pointer transition-all">
+            <i class="fa-solid fa-radio text-red-400"></i>
+            <span>راديو بي بي سي</span>
+          </button>
+          <button onclick="openLiveTV()" class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#2b2b2b] text-gray-200 hover:bg-[#bb1919] hover:text-white border border-[#3f3f3f] font-medium text-xs cursor-pointer transition-colors">
+            <i class="fa-solid fa-tv text-red-400"></i>
+            <span>البث الحي</span>
+          </button>
+          <button onclick="openBookmarks()" class="relative p-1.5 text-gray-300 hover:text-white hover:bg-[#333] rounded transition-colors cursor-pointer" title="المحفوظات">
+            <i class="fa-regular fa-bookmark"></i>
+            <span id="bookmarkBadge" class="absolute -top-1 -right-1 bg-[#bb1919] text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">2</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Main BBC Header -->
+    <div class="bg-[#bb1919] text-white px-4 sm:px-8 py-3 flex items-center justify-between gap-4 shadow-lg">
+      <div class="flex items-center gap-4">
+        <a href="#" class="flex items-center gap-3 group text-white no-underline">
+          <div class="flex items-center gap-1 font-black text-xl sm:text-2xl tracking-tighter">
+            <span class="w-8 h-8 sm:w-8.5 sm:h-8.5 bg-white text-[#bb1919] flex items-center justify-center font-serif font-black shadow-sm">B</span>
+            <span class="w-8 h-8 sm:w-8.5 sm:h-8.5 bg-white text-[#bb1919] flex items-center justify-center font-serif font-black shadow-sm">B</span>
+            <span class="w-8 h-8 sm:w-8.5 sm:h-8.5 bg-white text-[#bb1919] flex items-center justify-center font-serif font-black shadow-sm">C</span>
+          </div>
+          <div class="w-px h-6 bg-white/40 mx-1 hidden sm:block"></div>
+          <div class="flex items-center gap-2">
+            <span class="text-2xl sm:text-3xl font-black tracking-widest text-white">عربي</span>
+            <span class="hidden md:inline-block bg-black/30 text-white/90 text-[10px] font-bold px-2 py-0.5 uppercase tracking-wider rounded">الأخبار الموثوقة</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="relative flex-1 max-w-md hidden md:block">
+        <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="ابحث في الأخبار والتقارير..." class="w-full bg-black/20 text-white placeholder-white/70 text-sm rounded-sm border border-white/20 focus:border-white focus:bg-black/35 focus:outline-none py-2 pr-10 pl-8 transition-colors">
+        <i class="fa-solid fa-magnifying-glass text-white/70 absolute right-3 top-3 pointer-events-none"></i>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <div onclick="openCategory('عاجل وتغطية حية')" class="flex items-center gap-2 bg-black/30 hover:bg-black/50 text-white px-3 py-1.5 text-xs font-bold uppercase tracking-wider cursor-pointer border border-white/20 rounded-sm">
+          <span class="w-2 h-2 rounded-full bg-white pulse-dot"></span>
+          <span>تغطية حية</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Sub-Navigation Bar -->
+    <nav class="bg-[#1a1a1a] border-b border-white/10 px-4 sm:px-8 h-12 flex gap-6 sm:gap-8 items-center text-[14px] sm:text-[15px] font-medium overflow-x-auto no-scrollbar shadow-sm">
+      <div class="max-w-7xl mx-auto w-full flex items-center gap-6 sm:gap-8 whitespace-nowrap">
+        <button onclick="filterCategory('الرئيسية')" class="nav-cat py-1 font-bold text-white border-b-2 border-white cursor-pointer">الرئيسية</button>
+        <button onclick="filterCategory('الشرق الأوسط')" class="nav-cat py-1 text-gray-400 hover:text-white cursor-pointer">الشرق الأوسط</button>
+        <button onclick="filterCategory('العالم')" class="nav-cat py-1 text-gray-400 hover:text-white cursor-pointer">العالم</button>
+        <button onclick="filterCategory('اقتصاد وأعمال')" class="nav-cat py-1 text-gray-400 hover:text-white cursor-pointer">اقتصاد وأعمال</button>
+        <button onclick="filterCategory('علوم وتكنولوجيا')" class="nav-cat py-1 text-gray-400 hover:text-white cursor-pointer">علوم وتكنولوجيا</button>
+        <button onclick="filterCategory('صحة')" class="nav-cat py-1 text-gray-400 hover:text-white cursor-pointer">صحة</button>
+        <button onclick="filterCategory('رياضة')" class="nav-cat py-1 text-gray-400 hover:text-white cursor-pointer">رياضة</button>
+        <button onclick="filterCategory('تحقيقات')" class="nav-cat py-1 text-gray-400 hover:text-white cursor-pointer">تحقيقات</button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- 4. Breaking News Ticker -->
+  <div class="w-full bg-[#111111] text-white border-b border-white/10 shadow-lg z-30 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto flex items-center justify-between text-sm">
+      <div class="bg-[#bb1919] flex items-center gap-2 px-5 py-2.5 font-bold text-xs sm:text-sm tracking-wide shrink-0 shadow-[10px_0_15px_rgba(0,0,0,0.5)] z-10">
+        <span class="w-2 h-2 rounded-full bg-white pulse-dot"></span>
+        <i class="fa-solid fa-fire text-amber-300"></i>
+        <span class="font-black uppercase tracking-wider">عاجل</span>
+      </div>
+      <span class="text-[11px] text-gray-400 hidden md:inline-block font-mono px-3 shrink-0" id="tickerTime">منذ 3 دقائق</span>
+      <div onclick="openStory(1)" class="flex-1 min-w-0 cursor-pointer group flex items-center gap-3 overflow-hidden px-3 py-2">
+        <span id="tickerText" class="text-xs sm:text-sm font-medium text-gray-200 group-hover:text-white group-hover:underline truncate transition-all">
+          مجلس الأمن يعقد جلسة طارئة بشأن التطورات المتسارعة في الشرق الأوسط
+        </span>
+        <span class="hidden sm:inline-block text-[10px] bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white px-2.5 py-0.5 font-bold rounded-sm shrink-0 transition-colors">اقرأ التفاصيل</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Main Hero Lead Section -->
+  <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- Main Lead (8 cols) -->
+      <div class="lg:col-span-8 flex flex-col gap-6">
+        
+        <!-- Big Hero Story -->
+        <div onclick="openStory(1)" class="relative min-h-[440px] sm:min-h-[480px] group cursor-pointer bg-neutral-950 rounded-sm overflow-hidden border border-white/10 shadow-2xl flex flex-col justify-end">
+          <div class="absolute inset-0 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=1200&q=80" alt="Hero" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out opacity-85">
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent z-10"></div>
+          </div>
+
+          <div class="absolute top-6 right-6 z-20 flex items-center gap-2">
+            <span class="bg-[#bb1919] text-white px-3 py-1 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-md">
+              <span class="w-1.5 h-1.5 bg-white rounded-full pulse-dot"></span>
+              مباشر
+            </span>
+            <span class="bg-black/60 backdrop-blur-md text-white/90 text-xs font-bold px-2.5 py-1 border border-white/10">الشرق الأوسط</span>
+          </div>
+
+          <div class="relative p-6 sm:p-10 z-20 w-full">
+            <h1 class="text-2xl sm:text-4xl lg:text-5xl font-serif font-bold text-white leading-tight mb-4 group-hover:underline">
+              مجلس الأمن يعقد جلسة طارئة لمناقشة التهدئة والمسارات الدبلوماسية
+            </h1>
+            <p class="text-gray-300 text-sm sm:text-lg leading-relaxed line-clamp-2 max-w-3xl mb-4 font-normal">
+              توافد ممثلو الدول الأعضاء إلى المقر الدائم للأمم المتحدة وسط دعوات دولية لوقف فوري لإطلاق النار وتأمين الممرات الإنسانية.
+            </p>
+            <div class="flex flex-wrap items-center justify-between gap-3 text-xs text-gray-400 pt-3 border-t border-white/10">
+              <div class="flex items-center gap-3">
+                <span class="text-gray-200 font-semibold">مراسلو بي بي سي في نيويورك</span>
+                <span>•</span>
+                <span class="font-mono">منذ 15 دقيقة</span>
+                <span>•</span>
+                <span>4 دقائق قراءة</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <button onclick="event.stopPropagation(); playAudio('مجلس الأمن يعقد جلسة طارئة')" class="flex items-center gap-1.5 bg-white/10 hover:bg-[#bb1919] text-white px-3 py-1.5 rounded text-xs transition-colors cursor-pointer">
+                  <i class="fa-solid fa-volume-high text-xs"></i>
+                  <span>استمع للتقرير</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2 Secondary Grid Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div onclick="openStory(2)" class="flex flex-col gap-2 group cursor-pointer bg-[#141414] p-4 rounded-sm border border-white/5 hover:border-white/15 transition-all">
+            <div class="h-44 bg-neutral-800 rounded-sm mb-2 overflow-hidden relative">
+              <img src="https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?auto=format&fit=crop&w=600&q=80" alt="Tech" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+              <span class="absolute top-2 right-2 bg-[#bb1919] text-white text-[10px] font-bold px-2 py-0.5">اقتصاد وأعمال</span>
+            </div>
+            <h3 class="font-bold text-base sm:text-lg group-hover:text-[#bb1919] transition-colors leading-snug text-white line-clamp-2">
+              أسواق الطاقة تسجل تقلبات ملحوظة مع ترقب قرارات أوبك بلس
+            </h3>
+            <p class="text-xs text-gray-400 line-clamp-2 leading-relaxed">
+              تأثرت أسعار النفط الخام بالبيانات الاقتصادية الأخيرة حول الطلب العالمي وسلاسل الإمداد.
+            </p>
+            <div class="flex items-center justify-between text-xs text-gray-500 mt-2 pt-2 border-t border-white/5">
+              <span>منذ ساعة</span>
+              <span>قسم الاقتصاد</span>
+            </div>
+          </div>
+
+          <div onclick="openStory(3)" class="flex flex-col gap-2 group cursor-pointer bg-[#141414] p-4 rounded-sm border border-white/5 hover:border-white/15 transition-all">
+            <div class="h-44 bg-neutral-800 rounded-sm mb-2 overflow-hidden relative">
+              <img src="https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&fit=crop&w=600&q=80" alt="Science" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+              <span class="absolute top-2 right-2 bg-[#bb1919] text-white text-[10px] font-bold px-2 py-0.5">علوم وتكنولوجيا</span>
+            </div>
+            <h3 class="font-bold text-base sm:text-lg group-hover:text-[#bb1919] transition-colors leading-snug text-white line-clamp-2">
+              اكتشاف فلكي جديد يفتح آفاقاً لفهم تكوّن الكواكب الصخرية
+            </h3>
+            <p class="text-xs text-gray-400 line-clamp-2 leading-relaxed">
+              رصد تلسكوب فضائي مؤشرات واعدة لوجود بخار الماء في الغلاف الجوي لكوكب خارج مجموعتنا الشمسية.
+            </p>
+            <div class="flex items-center justify-between text-xs text-gray-500 mt-2 pt-2 border-t border-white/5">
+              <span>منذ ساعتين</span>
+              <span>محرر الشؤون العلمية</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Aside: Most Read (الأكثر قراءة) (4 cols) -->
+      <aside class="lg:col-span-4 flex flex-col gap-6 bg-[#141414] p-6 rounded-sm border border-white/5 shadow-xl">
+        <div class="border-r-4 border-[#bb1919] pr-4">
+          <h2 class="text-2xl font-bold text-white tracking-tight">الأكثر قراءة</h2>
+          <span class="text-xs text-gray-500">متابعات الساعة على مدار اليوم</span>
+        </div>
+
+        <div class="space-y-6">
+          <div onclick="openStory(1)" class="flex gap-5 group cursor-pointer">
+            <span class="text-4xl font-serif text-[#bb1919] font-black italic opacity-60 w-10 shrink-0 select-none">١</span>
+            <div class="flex flex-col gap-1.5">
+              <h4 class="font-bold text-base leading-snug group-hover:underline text-gray-100 group-hover:text-white line-clamp-2">
+                مجلس الأمن يعقد جلسة طارئة لمناقشة التهدئة والمسارات الدبلوماسية
+              </h4>
+              <span class="text-xs text-gray-500">الشرق الأوسط • منذ 15 دقيقة</span>
+            </div>
+          </div>
+
+          <div onclick="openStory(2)" class="flex gap-5 group cursor-pointer border-t border-white/5 pt-6">
+            <span class="text-4xl font-serif text-[#bb1919] font-black italic opacity-60 w-10 shrink-0 select-none">٢</span>
+            <div class="flex flex-col gap-1.5">
+              <h4 class="font-bold text-base leading-snug group-hover:underline text-gray-100 group-hover:text-white line-clamp-2">
+                أسواق الطاقة تسجل تقلبات ملحوظة مع ترقب قرارات أوبك بلس
+              </h4>
+              <span class="text-xs text-gray-500">اقتصاد • منذ ساعة</span>
+            </div>
+          </div>
+
+          <div onclick="openStory(3)" class="flex gap-5 group cursor-pointer border-t border-white/5 pt-6">
+            <span class="text-4xl font-serif text-[#bb1919] font-black italic opacity-60 w-10 shrink-0 select-none">٣</span>
+            <div class="flex flex-col gap-1.5">
+              <h4 class="font-bold text-base leading-snug group-hover:underline text-gray-100 group-hover:text-white line-clamp-2">
+                اكتشاف فلكي جديد يفتح آفاقاً لفهم تكوّن الكواكب الصخرية
+              </h4>
+              <span class="text-xs text-gray-500">علوم • منذ ساعتين</span>
+            </div>
+          </div>
+
+          <div onclick="openStory(4)" class="flex gap-5 group cursor-pointer border-t border-white/5 pt-6">
+            <span class="text-4xl font-serif text-[#bb1919] font-black italic opacity-60 w-10 shrink-0 select-none">٤</span>
+            <div class="flex flex-col gap-1.5">
+              <h4 class="font-bold text-base leading-snug group-hover:underline text-gray-100 group-hover:text-white line-clamp-2">
+                تحقيق رقمي: كيف يتم التحقق من مقاطع الفيديو المتداولة في النزاعات
+              </h4>
+              <span class="text-xs text-gray-500">بي بي سي تتحقق • منذ 4 ساعات</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 pt-6 border-t border-white/10 bg-[#1a1a1a] p-4 rounded-sm">
+          <h4 class="text-xs font-bold text-white mb-1 flex items-center gap-1.5">
+            <i class="fa-solid fa-bell text-[#bb1919]"></i>
+            <span>تنبيهات بي بي سي الإخبارية المباشرة</span>
+          </h4>
+          <p class="text-[11px] text-gray-400 mb-3 leading-relaxed">
+            اشترك لتصلك الإشعارات والتقارير الميدانية فور نشرها على مدار 24 ساعة.
+          </p>
+          <button onclick="alert('تم تفعيل التنبيهات المباشرة بنجاح!') " class="w-full bg-[#bb1919] hover:bg-[#990000] text-white text-xs font-bold py-2 rounded-sm transition-colors text-center cursor-pointer">
+            تفعيل الإشعارات الفورية
+          </button>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- 6. Bottom Audio Player -->
+  <div id="audioBar" class="fixed bottom-0 left-0 right-0 bg-[#161616] border-t border-[#333] px-4 py-3 z-50 flex items-center justify-between shadow-2xl transition-all">
+    <div class="max-w-7xl mx-auto w-full flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-[#bb1919] rounded flex items-center justify-center text-white text-lg">
+          <i class="fa-solid fa-radio"></i>
+        </div>
+        <div>
+          <h4 id="audioTitle" class="text-xs sm:text-sm font-bold text-white">راديو بي بي سي عربي - البث المباشر</h4>
+          <span class="text-[11px] text-gray-400">على مدار 24 ساعة من لندن</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button onclick="toggleAudioPlay()" id="audioPlayBtn" class="w-9 h-9 bg-white text-[#bb1919] rounded-full flex items-center justify-center hover:scale-105 transition-transform cursor-pointer">
+          <i class="fa-solid fa-play text-sm"></i>
+        </button>
+        <button onclick="document.getElementById('audioBar').classList.add('hidden')" class="text-gray-400 hover:text-white p-1 text-sm cursor-pointer">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Article Modal -->
+  <div id="storyModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-[#141414] border border-white/10 max-w-2xl w-full rounded-sm max-h-[85vh] overflow-y-auto p-6 sm:p-8 relative">
+      <button onclick="closeStory()" class="absolute top-4 left-4 text-gray-400 hover:text-white text-lg cursor-pointer">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <span id="modalCat" class="bg-[#bb1919] text-white text-xs font-bold px-2.5 py-1 mb-3 inline-block">الشرق الأوسط</span>
+      <h2 id="modalTitle" class="text-2xl sm:text-3xl font-bold text-white mb-4 leading-tight">عنوان التقرير الإخباري</h2>
+      <div class="text-xs text-gray-400 mb-4 pb-3 border-b border-white/10 flex items-center gap-3">
+        <span>محرر بي بي سي عربي</span> • <span>نُشر اليوم</span>
+      </div>
+      <img id="modalImg" src="" alt="Story" class="w-full h-64 object-cover rounded-sm mb-6">
+      <div id="modalBody" class="text-sm sm:text-base text-gray-200 leading-relaxed space-y-4 font-normal">
+        <p>تفاصيل التغطية الإخبارية والتحليلات الميدانية الخاصة بفريق مراسلي بي بي سي...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="w-full bg-[#121212] text-gray-400 text-xs py-8 border-t border-white/10 mt-12">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <span class="w-6 h-6 bg-white text-[#bb1919] font-serif font-black flex items-center justify-center text-xs">B</span>
+        <span class="w-6 h-6 bg-white text-[#bb1919] font-serif font-black flex items-center justify-center text-xs">B</span>
+        <span class="w-6 h-6 bg-white text-[#bb1919] font-serif font-black flex items-center justify-center text-xs">C</span>
+        <span class="font-bold text-white mr-2">بي بي سي عربي</span>
+      </div>
+      <div class="flex flex-wrap gap-4">
+        <a href="#" class="hover:text-white">شروط الاستخدام</a>
+        <a href="#" class="hover:text-white">سياسة الخصوصية</a>
+        <a href="#" class="hover:text-white">ملفات تعريف الارتباط (كوكيز)</a>
+        <a href="#" class="hover:text-white">تواصل مع بي بي سي</a>
+      </div>
+      <div>
+        جميع الحقوق محفوظة © 2026 بي بي سي.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const storiesData = {
+      1: {
+        title: "مجلس الأمن يعقد جلسة طارئة لمناقشة التهدئة والمسارات الدبلوماسية",
+        category: "الشرق الأوسط",
+        image: "https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=1200&q=80",
+        body: "عقد مجلس الأمن الدولي جلسة مشاورات عاجلة في مقره بمدينة نيويورك بحضور المندوبين الدائمين وممثلي المنظمات الإنسانية. وركزت المداولات على سبل حماية المدنيين وفتح ممرات إنسانية آمنة لنقل الإمدادات الطبية والإغاثية العاجلة.<br><br>وأكد منسق الشؤون الإنسانية بالأمم المتحدة في إحاطته أن الوضع الميداني يتطلب استجابة فورية منسقة، داعياً كافة الأطراف إلى الالتزام بالقانون الدولي الإنساني وتجنب استهداف المنشآت الحيوية."
+      },
+      2: {
+        title: "أسواق الطاقة تسجل تقلبات ملحوظة مع ترقب قرارات أوبك بلس",
+        category: "اقتصاد وأعمال",
+        image: "https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?auto=format&fit=crop&w=600&q=80",
+        body: "شهدت أسواق النفط والغاز العالمية تقلبات سعرية واسعة مع ترقب المتعاملين للاجتماع الوزاري القادم لتحالف أوبك بلس، في وقت تشير فيه التوقعات إلى إمكانية الإبقاء على سياسات الإنتاج الحالية لدعم استقرار الأسواق.<br><br>وأوضح محللون اقتصاديون أن التوترات الجيوسياسية ومعدلات التضخم العالمية لا تزال تشكل العوامل الرئيسية المؤثرة في قرارات المستثمرين."
+      },
+      3: {
+        title: "اكتشاف فلكي جديد يفتح آفاقاً لفهم تكوّن الكواكب الصخرية",
+        category: "علوم وتكنولوجيا",
+        image: "https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&fit=crop&w=600&q=80",
+        body: "أعلن فريق دولي من علماء الفلك عن رصد مؤشرات حيوية في الغلاف الجوي لكوكب خارج المجموعة الشمسية، مستخدمين أدوات الرصد الطيفي المتطورة.<br><br>ويعد هذا الكشف خطوة هامة نحو فهم كيفية تطور الأغلفة الجوية للكواكب الشبيهة بالأرض والظروف الملائمة لاستدامة المياه السائلة."
+      },
+      4: {
+        title: "تحقيق رقمي: كيف يتم التحقق من مقاطع الفيديو المتداولة في النزاعات",
+        category: "بي بي سي تتحقق",
+        image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80",
+        body: "تكشف وحدة 'بي بي سي تتحقق' (BBC Verify) عن التقنيات المستخدمة في فحص الصور والمقاطع المصورة، بما في ذلك تحديد الموقع الجغرافي (Geolocation) والتحليل الزمني للظلال ومطابقة التضاريس مع صور الأقمار الصناعية عالية الدقة."
+      }
+    };
+
+    function openStory(id) {
+      const story = storiesData[id] || storiesData[1];
+      document.getElementById('modalTitle').innerText = story.title;
+      document.getElementById('modalCat').innerText = story.category;
+      document.getElementById('modalImg').src = story.image;
+      document.getElementById('modalBody').innerHTML = story.body;
+      document.getElementById('storyModal').classList.remove('hidden');
+    }
+
+    function closeStory() {
+      document.getElementById('storyModal').classList.add('hidden');
+    }
+
+    let isAudioPlaying = false;
+    function toggleAudioPlay() {
+      isAudioPlaying = !isAudioPlaying;
+      const btn = document.getElementById('audioPlayBtn');
+      if (isAudioPlaying) {
+        btn.innerHTML = '<i class="fa-solid fa-pause text-sm"></i>';
+      } else {
+        btn.innerHTML = '<i class="fa-solid fa-play text-sm"></i>';
+      }
+    }
+
+    function playAudio(title) {
+      document.getElementById('audioBar').classList.remove('hidden');
+      document.getElementById('audioTitle').innerText = title;
+      isAudioPlaying = true;
+      document.getElementById('audioPlayBtn').innerHTML = '<i class="fa-solid fa-pause text-sm"></i>';
+    }
+
+    function toggleRadio() {
+      playAudio('راديو بي بي سي عربي - البث المباشر');
+    }
+
+    function openLiveTV() {
+      openStory(1);
+    }
+
+    function openBookmarks() {
+      alert('الأخبار المحفوظة: 2 تقارير محفوظة للقراءة في وضع عدم الاتصال.');
+    }
+
+    function filterCategory(cat) {
+      const buttons = document.querySelectorAll('.nav-cat');
+      buttons.forEach(btn => {
+        if (btn.innerText.trim() === cat) {
+          btn.className = 'nav-cat py-1 font-bold text-white border-b-2 border-white cursor-pointer';
+        } else {
+          btn.className = 'nav-cat py-1 text-gray-400 hover:text-white cursor-pointer';
+        }
+      });
+    }
+
+    function handleSearch(val) {
+      if (val.trim()) {
+        console.log("Searching for:", val);
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'Cairo', 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #0a0a0a;
+    color: #ffffff;
+  }
+}
+
+/* Sophisticated Dark Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #262626;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #bb1919;
+}
+
+/* BBC Audio Visualizer bars */
+@keyframes bbc-equalizer {
+  0% { height: 4px; }
+  50% { height: 20px; }
+  100% { height: 4px; }
+}
+
+.animate-equalizer-1 {
+  animation: bbc-equalizer 0.8s ease-in-out infinite;
+}
+.animate-equalizer-2 {
+  animation: bbc-equalizer 0.6s ease-in-out infinite 0.2s;
+}
+.animate-equalizer-3 {
+  animation: bbc-equalizer 1s ease-in-out infinite 0.4s;
+}
+.animate-equalizer-4 {
+  animation: bbc-equalizer 0.7s ease-in-out infinite 0.1s;
+}
+
+/* Pulse animation for Breaking news */
+@keyframes bbc-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.1); }
+}
+
+.animate-bbc-pulse {
+  animation: bbc-pulse 1.5s infinite;
+}
+
+/* Marquee animation */
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  display: flex;
+  width: 200%;
+  animation: marquee 35s linear infinite;
+}
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Utility to hide scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+
